@@ -196,6 +196,17 @@
   .guest .del{background:var(--card2)!important;color:var(--red)!important}
   .g-del{flex:0 0 auto;border:none;cursor:pointer;font-family:inherit;font-size:13px;padding:6px 10px;border-radius:8px;background:var(--card2);color:var(--faint);transition:.15s}
   .g-del:hover{background:rgba(207,75,47,.15);color:var(--red)}
+  .guest-card{flex-direction:column;align-items:stretch;gap:8px}
+  .guest-main{display:flex;align-items:center;gap:12px}
+  .guest-sub{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-inline-start:4px}
+  .g-amt{width:72px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:5px 8px;color:var(--amber);font-family:'Frank Ruhl Libre',serif;font-weight:700;font-size:15px;text-align:center;-moz-appearance:textfield}
+  .g-amt::-webkit-inner-spin-button,.g-amt::-webkit-outer-spin-button{-webkit-appearance:none}
+  .g-amt:focus{outline:none;border-color:var(--ember)}
+  .g-sym{color:var(--amber);font-weight:700;font-size:14px}
+  .methods{display:flex;gap:5px;flex-wrap:wrap}
+  .meth-btn{border:1px solid var(--line);background:var(--card2);color:var(--muted);font-family:inherit;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:7px;cursor:pointer;transition:.15s}
+  .meth-btn:hover{color:var(--ink);border-color:var(--faint)}
+  .meth-btn.meth-on{background:var(--paid);border-color:transparent;color:#14230a;font-weight:700}
   li.item .item-del{flex:0 0 auto;border:none;cursor:pointer;background:transparent;color:var(--faint);font-size:12px;padding:4px 7px;border-radius:6px;transition:.15s}
   li.item .item-del:hover{color:var(--red);background:rgba(207,75,47,.12)}
   .saved{position:fixed;bottom:18px;inset-inline-start:50%;transform:translateX(-50%) translateY(30px);background:var(--paid);color:#14230a;font-weight:600;font-size:13px;padding:9px 20px;border-radius:999px;opacity:0;transition:.35s;z-index:50;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.4)}
@@ -522,7 +533,17 @@ async function loadState(){
     if(r&&r.value){
       const saved=JSON.parse(r.value);
       STATE.checks=saved.checks||{};
-      if(saved.guests)STATE.guests=saved.guests;
+      if(saved.guests){
+        STATE.guests=saved.guests;
+        // migration: if old format missing name, restore from seed
+        GUESTS.forEach((g,i)=>{
+          if(STATE.guests[g.id]&&!STATE.guests[g.id].name){
+            STATE.guests[g.id].name=g.name;
+            STATE.guests[g.id].note=STATE.guests[g.id].note||g.note||'';
+            if(STATE.guests[g.id].ts===undefined)STATE.guests[g.id].ts=i;
+          }
+        });
+      }
       if(saved.expenses)STATE.expenses=saved.expenses;
       if(saved.shopCustom)STATE.shopCustom=saved.shopCustom;
       if(saved.shopDeleted)STATE.shopDeleted=saved.shopDeleted;
@@ -668,11 +689,21 @@ function guestsHTML(){
   const collected=gList.reduce((s,[,g])=>s+(g.paid?(+g.amount||0):0),0);
   let rows='';
   gList.forEach(([id,g])=>{
-    rows+=`<div class="guest${g.paid?' paid':''}" data-gid="${id}">
-      <button class="toggle">${g.paid?'שולם ✓':'לא שולם'}</button>
-      <div class="gname">${esc(g.name)}${g.note?`<small>${esc(g.note)}</small>`:''}</div>
-      <div class="amt">${(+g.amount).toLocaleString()}₪</div>
-      <button class="g-del" data-gid="${id}">✕</button>
+    const m=g.method||'';
+    const meths=['paybox','bit','cash'];
+    const methLabels={paybox:'Paybox',bit:'Bit',cash:'מזומן'};
+    const methBtns=meths.map(k=>`<button class="meth-btn${m===k?' meth-on':''}" data-gid="${id}" data-m="${k}">${methLabels[k]}</button>`).join('');
+    rows+=`<div class="guest guest-card${g.paid?' paid':''}" data-gid="${id}">
+      <div class="guest-main">
+        <button class="toggle">${g.paid?'שולם ✓':'לא שולם'}</button>
+        <div class="gname">${esc(g.name)}${g.note?`<small>${esc(g.note)}</small>`:''}</div>
+        <button class="g-del" data-gid="${id}">✕</button>
+      </div>
+      <div class="guest-sub">
+        <input class="g-amt" type="number" inputmode="decimal" value="${+g.amount}" data-gid="${id}" min="0">
+        <span class="g-sym">₪</span>
+        <div class="methods">${methBtns}</div>
+      </div>
     </div>`;
   });
   return `
@@ -693,7 +724,7 @@ function guestsHTML(){
   </div>
   <div class="card">
     <h3><span class="h-ic">👥</span> רשימת מוזמנים · ${gList.length} רשומים</h3>
-    <p class="desc">לחיצה על הכפתור מסמנת מי שילם. ✕ מסיר אורח.</p>
+    <p class="desc">שולם/לא שולם · ערוך סכום · בחר אמצעי תשלום · ✕ להסיר</p>
     ${rows}
     <div class="tip">לתכנון קניות עובדים לפי 20 אנשים · לתכנון בשר לפי 19 אוכלי בשר.</div>
   </div>`;
@@ -808,10 +839,30 @@ function bindPanel(){
   panelsEl.querySelectorAll('[data-go]').forEach(row=>{
     row.onclick=()=>{activeTab=row.dataset.go;render();window.scrollTo({top:0,behavior:'smooth'});};
   });
+  // guest: toggle paid
   panelsEl.querySelectorAll('.guest[data-gid]').forEach(g=>{
     g.querySelector('.toggle').onclick=()=>{
       const id=g.dataset.gid;
       STATE.guests[id].paid=!STATE.guests[id].paid;
+      saveState();render();
+    };
+  });
+  // guest: edit amount
+  panelsEl.querySelectorAll('.g-amt').forEach(inp=>{
+    const save=()=>{
+      const val=parseFloat(inp.value);
+      if(!isNaN(val)&&val>=0){STATE.guests[inp.dataset.gid].amount=val;saveState();}
+    };
+    inp.addEventListener('change',save);
+    inp.addEventListener('blur',save);
+    inp.addEventListener('click',e=>e.stopPropagation());
+  });
+  // guest: payment method
+  panelsEl.querySelectorAll('.meth-btn').forEach(b=>{
+    b.onclick=(e)=>{
+      e.stopPropagation();
+      const id=b.dataset.gid;const m=b.dataset.m;
+      STATE.guests[id].method=(STATE.guests[id].method===m?'':m);
       saveState();render();
     };
   });

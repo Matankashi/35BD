@@ -207,6 +207,8 @@
   .meth-btn{border:1px solid var(--line);background:var(--card2);color:var(--muted);font-family:inherit;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:7px;cursor:pointer;transition:.15s}
   .meth-btn:hover{color:var(--ink);border-color:var(--faint)}
   .meth-btn.meth-on{background:var(--paid);border-color:transparent;color:#14230a;font-weight:700}
+  .g-count{border:1px solid var(--line);background:var(--card2);color:var(--amber);font-family:'Frank Ruhl Libre',serif;font-weight:700;font-size:13px;padding:4px 9px;border-radius:7px;cursor:pointer;transition:.15s;min-width:32px;text-align:center}
+  .g-count:hover{border-color:var(--ember);color:var(--ember2)}
   li.item .item-del{flex:0 0 auto;border:none;cursor:pointer;background:transparent;color:var(--faint);font-size:12px;padding:4px 7px;border-radius:6px;transition:.15s}
   li.item .item-del:hover{color:var(--red);background:rgba(207,75,47,.12)}
   .saved{position:fixed;bottom:18px;inset-inline-start:50%;transform:translateX(-50%) translateY(30px);background:var(--paid);color:#14230a;font-weight:600;font-size:13px;padding:9px 20px;border-radius:999px;opacity:0;transition:.35s;z-index:50;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.4)}
@@ -262,13 +264,13 @@ const GUESTS = [
   {id:'g4',name:'אשף',note:'משלם כשייסגר'},
   {id:'g5',name:'אסף',paid:true,amount:200},
   {id:'g6',name:'שמיר'},
-  {id:'g7',name:'אריק',paid:true,note:'זוג',amount:240},
+  {id:'g7',name:'אריק',paid:true,note:'זוג',amount:240,count:2},
   {id:'g8',name:'אייל'},
-  {id:'g9',name:'מז — תומר והרן',note:'שניים',amount:240},
+  {id:'g9',name:'מז — תומר והרן',note:'שניים',amount:240,count:2},
   {id:'g10',name:'קובה'},
   {id:'g11',name:'שובל'},
-  {id:'g12',name:'אופק ואולגה',note:'שניים',amount:240},
-  {id:'g13',name:'רום וליסה',note:'שניים',amount:240},
+  {id:'g12',name:'אופק ואולגה',note:'שניים',amount:240,count:2},
+  {id:'g13',name:'רום וליסה',note:'שניים',amount:240,count:2},
   {id:'g14',name:'אהוד'},
   {id:'g15',name:'ווינשטוק'},
   {id:'g16',name:'גיא',note:'לבד · טבעוני · מביא אוכל',amount:50},
@@ -527,7 +529,7 @@ const STORE_KEY='state';
 
 async function loadState(){
   // seed defaults (only used when no saved state exists)
-  GUESTS.forEach((g,i)=>{STATE.guests[g.id]={name:g.name,note:g.note||'',paid:!!g.paid,amount:g.amount||120,ts:i};});
+  GUESTS.forEach((g,i)=>{STATE.guests[g.id]={name:g.name,note:g.note||'',paid:!!g.paid,amount:g.amount||120,count:g.count||1,ts:i};});
   try{
     const r=await window.storage.get(STORE_KEY);
     if(r&&r.value){
@@ -537,10 +539,11 @@ async function loadState(){
         STATE.guests=saved.guests;
         // migration: if old format missing name, restore from seed
         GUESTS.forEach((g,i)=>{
-          if(STATE.guests[g.id]&&!STATE.guests[g.id].name){
-            STATE.guests[g.id].name=g.name;
-            STATE.guests[g.id].note=STATE.guests[g.id].note||g.note||'';
+          if(STATE.guests[g.id]){
+            if(!STATE.guests[g.id].name)STATE.guests[g.id].name=g.name;
+            if(!STATE.guests[g.id].note)STATE.guests[g.id].note=g.note||'';
             if(STATE.guests[g.id].ts===undefined)STATE.guests[g.id].ts=i;
+            if(STATE.guests[g.id].count===undefined&&g.count)STATE.guests[g.id].count=g.count;
           }
         });
       }
@@ -585,7 +588,7 @@ function renderTabs(){
     b.className='tab'+(t.id===activeTab?' active':'');
     let cnt='';
     if(DATA[t.id]){const p=progressOf(t.id);cnt=`<span class="cnt">${p.done}/${p.total}</span>`;}
-    if(t.id==='guests'){const gs=Object.values(STATE.guests);const paid=gs.filter(g=>g.paid).length;cnt=`<span class="cnt">${paid}/${gs.length}</span>`;}
+    if(t.id==='guests'){const gs=Object.values(STATE.guests);const total=gs.reduce((s,g)=>s+(g.count||1),0);const paid=gs.reduce((s,g)=>s+(g.paid?(g.count||1):0),0);cnt=`<span class="cnt">${paid}/${total}</span>`;}
     if(t.id==='expenses'){cnt=`<span class="cnt">${STATE.expenses.length}</span>`;}
     b.innerHTML=`${t.icon} ${t.name}${cnt}`;
     b.onclick=()=>{activeTab=t.id;render();};
@@ -620,7 +623,8 @@ function dashboardHTML(){
   const expected=guestsArr.reduce((s,[id,g])=>s+(+g.amount||0),0);
   const collected=guestsArr.reduce((s,[id,g])=>s+(g.paid?(+g.amount||0):0),0);
   const outstanding=expected-collected;
-  const paidCount=guestsArr.filter(([,g])=>g.paid).length;
+  const totalPeople=guestsArr.reduce((s,[,g])=>s+(g.count||1),0);
+  const paidCount=guestsArr.reduce((s,[,g])=>s+(g.paid?(g.count||1):0),0);
   const spent=STATE.expenses.reduce((s,e)=>s+(+e.amount||0),0);
   const balance=collected-spent;
 
@@ -648,8 +652,8 @@ function dashboardHTML(){
   return `
   <div class="grid cols-3" style="margin-bottom:14px">
     <div class="stat"><div class="glow"></div><div class="lab">התקדמות כללית</div><div class="big ember">${overall}%</div><div class="foot">${totalDone} מתוך ${totalItems} משימות</div></div>
-    <div class="stat"><div class="lab">אורחים</div><div class="big">${guestsArr.length}<span style="font-size:18px;color:var(--muted)"> רשומות</span></div><div class="foot">קניות לפי 20 · בשר לפי 19</div></div>
-    <div class="stat"><div class="lab">שולמו</div><div class="big">${paidCount}<span style="font-size:18px;color:var(--muted)">/${guestsArr.length}</span></div><div class="foot">נותרו ${guestsArr.length-paidCount} לגבייה</div></div>
+    <div class="stat"><div class="lab">משתתפים</div><div class="big">${totalPeople}<span style="font-size:18px;color:var(--muted)"> אנשים</span></div><div class="foot">${guestsArr.length} רשומות</div></div>
+    <div class="stat"><div class="lab">שולמו</div><div class="big">${paidCount}<span style="font-size:18px;color:var(--muted)">/${totalPeople}</span></div><div class="foot">נותרו ${totalPeople-paidCount} לגבייה</div></div>
   </div>
 
   <div class="card" style="margin-bottom:14px">
@@ -685,11 +689,13 @@ function dashboardHTML(){
 /* ---------------- RENDER: guests ---------------- */
 function guestsHTML(){
   const gList=Object.entries(STATE.guests).sort((a,b)=>(a[1].ts||0)-(b[1].ts||0));
+  const totalPeople=gList.reduce((s,[,g])=>s+(g.count||1),0);
   const expected=gList.reduce((s,[,g])=>s+(+g.amount||0),0);
   const collected=gList.reduce((s,[,g])=>s+(g.paid?(+g.amount||0):0),0);
   let rows='';
   gList.forEach(([id,g])=>{
     const m=g.method||'';
+    const cnt=g.count||1;
     const meths=['paybox','bit','cash'];
     const methLabels={paybox:'Paybox',bit:'Bit',cash:'מזומן'};
     const methBtns=meths.map(k=>`<button class="meth-btn${m===k?' meth-on':''}" data-gid="${id}" data-m="${k}">${methLabels[k]}</button>`).join('');
@@ -700,6 +706,7 @@ function guestsHTML(){
         <button class="g-del" data-gid="${id}">✕</button>
       </div>
       <div class="guest-sub">
+        <button class="g-count" data-gid="${id}" title="מספר אנשים — לחץ לשינוי">×${cnt}</button>
         <input class="g-amt" type="number" inputmode="decimal" value="${+g.amount}" data-gid="${id}" min="0">
         <span class="g-sym">₪</span>
         <div class="methods">${methBtns}</div>
@@ -708,9 +715,9 @@ function guestsHTML(){
   });
   return `
   <div class="gtotal">
-    <div class="stat"><div class="lab">צפי כולל</div><div class="big" style="font-size:30px">${expected.toLocaleString()}₪</div></div>
+    <div class="stat"><div class="lab">סה״כ משתתפים</div><div class="big" style="font-size:30px">${totalPeople}</div><div class="foot">${gList.length} רשומות</div></div>
     <div class="stat"><div class="lab">נגבה</div><div class="big" style="font-size:30px;color:var(--paid)">${collected.toLocaleString()}₪</div></div>
-    <div class="stat"><div class="lab">נותר</div><div class="big" style="font-size:30px;color:var(--ember2)">${(expected-collected).toLocaleString()}₪</div></div>
+    <div class="stat"><div class="lab">נותר לגבות</div><div class="big" style="font-size:30px;color:var(--ember2)">${(expected-collected).toLocaleString()}₪</div></div>
   </div>
   <div class="card" style="margin-bottom:14px">
     <h3><span class="h-ic">➕</span> הוספת אורח</h3>
@@ -723,10 +730,10 @@ function guestsHTML(){
     </div>
   </div>
   <div class="card">
-    <h3><span class="h-ic">👥</span> רשימת מוזמנים · ${gList.length} רשומים</h3>
-    <p class="desc">שולם/לא שולם · ערוך סכום · בחר אמצעי תשלום · ✕ להסיר</p>
+    <h3><span class="h-ic">👥</span> רשימת מוזמנים · ${totalPeople} משתתפים</h3>
+    <p class="desc">שולם/לא שולם · ×N מספר אנשים · ערוך סכום · בחר אמצעי תשלום · ✕ להסיר</p>
     ${rows}
-    <div class="tip">לתכנון קניות עובדים לפי 20 אנשים · לתכנון בשר לפי 19 אוכלי בשר.</div>
+    <div class="tip">לחץ על ×N כדי לשנות את מספר האנשים ברשומה.</div>
   </div>`;
 }
 
@@ -856,6 +863,16 @@ function bindPanel(){
     inp.addEventListener('change',save);
     inp.addEventListener('blur',save);
     inp.addEventListener('click',e=>e.stopPropagation());
+  });
+  // guest: count toggle
+  panelsEl.querySelectorAll('.g-count').forEach(b=>{
+    b.onclick=(e)=>{
+      e.stopPropagation();
+      const id=b.dataset.gid;
+      const cur=STATE.guests[id].count||1;
+      STATE.guests[id].count=cur>=4?1:cur+1;
+      saveState();render();
+    };
   });
   // guest: payment method
   panelsEl.querySelectorAll('.meth-btn').forEach(b=>{

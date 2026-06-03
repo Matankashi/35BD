@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>על האש 🔥 יום הולדת 35</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script>
+  firebase.initializeApp({
+    apiKey: "AIzaSyBfxiFf8zcSmT7TlvHcHc4_NZoPxN_jz0w",
+    authDomain: "nutrition-plan-5ce1f.firebaseapp.com",
+    databaseURL: "https://nutrition-plan-5ce1f-default-rtdb.firebaseio.com",
+    projectId: "nutrition-plan-5ce1f",
+    storageBucket: "nutrition-plan-5ce1f.firebasestorage.app",
+    messagingSenderId: "1019976182145",
+    appId: "1:1019976182145:web:d2dc3e1b7763604d68a080"
+  });
+  const _db = firebase.database();
+  const FB_PATH = '35bd/matan';
+  window.storage = {
+    get: (key) => new Promise(res =>
+      _db.ref(`${FB_PATH}/${key}`).once('value', snap => {
+        res(snap.exists() ? { value: snap.val() } : null);
+      })
+    ),
+    set: (key, val) => _db.ref(`${FB_PATH}/${key}`).set(val)
+  };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#15100c;
+    --bg2:#1d160f;
+    --card:#241b13;
+    --card2:#2c2118;
+    --line:#3a2c20;
+    --ink:#f4ebde;
+    --muted:#a3917c;
+    --faint:#6f5f4f;
+    --ember:#ef7a3a;
+    --ember2:#ffa15c;
+    --amber:#f2b46a;
+    --red:#cf4b2f;
+    --paid:#86b566;
+    --paid-bg:#243018;
+    --shadow:0 18px 40px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Rubik',system-ui,sans-serif;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(239,122,58,.16), transparent 60%),
+      radial-gradient(900px 500px at 10% 0%, rgba(207,75,47,.10), transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    direction:rtl;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;z-index:0;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+    mix-blend-mode:overlay;
+  }
+  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 16px 80px}
+
+  /* Header */
+  header.hero{padding:34px 4px 18px}
+  .kicker{font-family:'Rubik';font-weight:600;letter-spacing:.18em;color:var(--amber);font-size:12px;text-transform:uppercase}
+  h1.title{
+    font-family:'Frank Ruhl Libre',serif;font-weight:900;
+    font-size:clamp(34px,7vw,58px);line-height:.98;margin:6px 0 4px;
+    background:linear-gradient(180deg,#fff3e4,#f2b46a 70%,#ef7a3a);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 2px 30px rgba(239,122,58,.18);
+  }
+  .sub{color:var(--muted);font-size:15px}
+  .flame{display:inline-block;animation:flick 2.4s ease-in-out infinite;transform-origin:bottom}
+  @keyframes flick{0%,100%{transform:rotate(-3deg) scale(1)}50%{transform:rotate(3deg) scale(1.08)}}
+
+  /* Event strip */
+  .evt{
+    display:flex;flex-wrap:wrap;gap:10px;margin-top:18px
+  }
+  .evt .pill{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:10px 14px;display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink)
+  }
+  .evt .pill b{color:var(--amber);font-weight:600}
+  .evt .pill .ic{font-size:16px}
+
+  /* Tabs */
+  nav.tabs{
+    position:sticky;top:0;z-index:20;display:flex;gap:6px;overflow-x:auto;
+    padding:12px 4px;margin:14px -4px 6px;
+    background:linear-gradient(180deg,var(--bg) 60%,rgba(21,16,12,0));
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{display:none}
+  .tab{
+    white-space:nowrap;border:1px solid var(--line);background:var(--card);
+    color:var(--muted);padding:9px 15px;border-radius:999px;font-size:13.5px;font-weight:500;
+    cursor:pointer;transition:.18s;flex:0 0 auto;font-family:inherit
+  }
+  .tab:hover{color:var(--ink);border-color:var(--faint)}
+  .tab.active{background:linear-gradient(180deg,var(--ember2),var(--ember));color:#241406;border-color:transparent;font-weight:700;box-shadow:0 6px 18px rgba(239,122,58,.35)}
+  .tab .cnt{font-size:11px;opacity:.7;margin-inline-start:4px}
+
+  .panel{display:none;animation:fade .35s ease}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* Cards / grid */
+  .grid{display:grid;gap:14px}
+  @media(min-width:720px){.cols-2{grid-template-columns:1fr 1fr}.cols-3{grid-template-columns:1fr 1fr 1fr}}
+  .card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+  .card h3{font-family:'Frank Ruhl Libre',serif;font-weight:700;font-size:20px;margin:0 0 4px;display:flex;align-items:center;gap:9px}
+  .card .h-ic{font-size:18px}
+  .card .desc{color:var(--muted);font-size:13px;margin:0 0 12px}
+
+  /* Dashboard stat cards */
+  .stat{background:linear-gradient(150deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:18px;padding:18px;position:relative;overflow:hidden}
+  .stat .lab{color:var(--muted);font-size:12.5px;font-weight:500;letter-spacing:.03em}
+  .stat .big{font-family:'Frank Ruhl Libre',serif;font-weight:900;font-size:40px;line-height:1;margin-top:8px;color:var(--ink)}
+  .stat .big.ember{color:var(--ember2)}
+  .stat .foot{color:var(--faint);font-size:12px;margin-top:6px}
+  .stat .glow{position:absolute;inset:auto -30px -30px auto;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(239,122,58,.25),transparent 70%)}
+
+  .countdown{display:flex;gap:10px;margin-top:10px}
+  .cd{flex:1;text-align:center;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:12px 4px}
+  .cd .n{font-family:'Frank Ruhl Libre',serif;font-weight:900;font-size:30px;color:var(--ember2);line-height:1}
+  .cd .u{color:var(--muted);font-size:11px;margin-top:4px}
+
+  /* progress */
+  .prog-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);cursor:pointer}
+  .prog-row:last-child{border-bottom:none}
+  .prog-row .pname{flex:1;font-size:14.5px;font-weight:500;display:flex;align-items:center;gap:8px}
+  .prog-row .pic{font-size:16px}
+  .bar{flex:1.4;height:9px;background:var(--bg2);border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ember),var(--amber));border-radius:6px;transition:width .5s cubic-bezier(.4,1.3,.5,1)}
+  .bar i.done{background:linear-gradient(90deg,var(--paid),#a7cf7e)}
+  .prog-row .pct{width:52px;text-align:left;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+  /* checklist items */
+  .sect{margin-bottom:18px}
+  .sect-head{font-weight:700;font-size:14px;color:var(--amber);margin:0 0 8px;letter-spacing:.02em;display:flex;align-items:center;gap:7px}
+  ul.list{list-style:none;margin:0;padding:0}
+  li.item{
+    display:flex;align-items:flex-start;gap:11px;padding:11px 12px;border-radius:12px;
+    background:var(--bg2);border:1px solid transparent;margin-bottom:7px;cursor:pointer;transition:.14s;user-select:none
+  }
+  li.item:hover{border-color:var(--line);background:var(--card2)}
+  li.item .box{
+    flex:0 0 22px;width:22px;height:22px;border-radius:7px;border:2px solid var(--faint);
+    margin-top:1px;display:grid;place-items:center;transition:.15s;font-size:14px;color:transparent
+  }
+  li.item.on .box{background:linear-gradient(180deg,var(--ember2),var(--ember));border-color:transparent;color:#231405;font-weight:900}
+  li.item .txt{flex:1;font-size:14.5px;line-height:1.4}
+  li.item .qty{color:var(--amber);font-weight:600;font-size:13px;margin-inline-start:6px}
+  li.item.on .txt{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--faint)}
+  li.item .note{display:block;color:var(--muted);font-size:12px;margin-top:2px;text-decoration:none!important}
+
+  /* info chips (already have) */
+  .info{background:rgba(134,181,102,.07);border:1px dashed rgba(134,181,102,.4);border-radius:14px;padding:14px}
+  .info .it{color:var(--amber);font-weight:600;font-size:13px;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:12.5px;color:var(--muted)}
+
+  /* guests */
+  .gtotal{display:grid;gap:12px;margin-bottom:16px}
+  @media(min-width:560px){.gtotal{grid-template-columns:1fr 1fr 1fr}}
+  .guest{display:flex;align-items:center;gap:12px;padding:12px;border-radius:13px;background:var(--bg2);border:1px solid var(--line);margin-bottom:8px;transition:.15s}
+  .guest.paid{background:var(--paid-bg);border-color:rgba(134,181,102,.4)}
+  .guest .toggle{flex:0 0 auto;border:none;cursor:pointer;font-family:inherit;font-weight:600;font-size:12px;padding:7px 12px;border-radius:9px;background:var(--card2);color:var(--muted);transition:.15s}
+  .guest.paid .toggle{background:var(--paid);color:#16240a}
+  .guest .gname{flex:1;font-weight:500;font-size:15px}
+  .guest .gname small{display:block;color:var(--faint);font-size:11.5px;font-weight:400;margin-top:1px}
+  .guest .amt{font-family:'Frank Ruhl Libre',serif;font-weight:700;font-size:17px;color:var(--amber);font-variant-numeric:tabular-nums}
+
+  .reset{margin-top:30px;text-align:center}
+  .reset button{background:none;border:1px solid var(--line);color:var(--faint);font-family:inherit;font-size:12.5px;padding:9px 18px;border-radius:10px;cursor:pointer}
+  .reset button:hover{color:var(--red);border-color:var(--red)}
+
+  .tip{font-size:12.5px;color:var(--muted);background:rgba(239,122,58,.07);border-inline-start:3px solid var(--ember);padding:10px 13px;border-radius:0 12px 12px 0;margin-top:6px}
+  .exp-add{display:flex;gap:8px;flex-wrap:wrap}
+  .exp-in{flex:1;min-width:150px;background:var(--bg2);border:1px solid var(--line);border-radius:11px;padding:12px 13px;color:var(--ink);font-family:inherit;font-size:14.5px}
+  .exp-in::placeholder{color:var(--faint)}
+  .exp-in:focus{outline:none;border-color:var(--ember)}
+  .exp-in.amt-in{flex:0 0 110px;min-width:90px;font-family:'Frank Ruhl Libre',serif;font-weight:700}
+  .exp-btn{border:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:14.5px;padding:12px 24px;border-radius:11px;background:linear-gradient(180deg,var(--ember2),var(--ember));color:#241406}
+  .exp-btn:hover{filter:brightness(1.07)}
+  .guest .del{background:var(--card2)!important;color:var(--red)!important}
+  .saved{position:fixed;bottom:18px;inset-inline-start:50%;transform:translateX(-50%) translateY(30px);background:var(--paid);color:#14230a;font-weight:600;font-size:13px;padding:9px 20px;border-radius:999px;opacity:0;transition:.35s;z-index:50;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+  .saved.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker">סיכום הכנות מלא</div>
+    <h1 class="title">על האש <span class="flame">🔥</span> יום הולדת 35</h1>
+    <div class="sub">לוח שליטה אחד לכל מה שצריך — קניות, קירור, ציוד ותשלומים</div>
+    <div class="evt">
+      <div class="pill"><span class="ic">📅</span> שבת, <b>6.6.2026</b></div>
+      <div class="pill"><span class="ic">📍</span> פארק הירקון · <b>שבע הטחנות</b></div>
+      <div class="pill"><span class="ic">🅿️</span> חניון פרדס גולדברג</div>
+      <div class="pill"><span class="ic">🕑</span> הגעה <b>14:00</b></div>
+      <div class="pill"><span class="ic">🔥</span> מנגל נדלק <b>15:00</b></div>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs"></nav>
+
+  <main id="panels"></main>
+
+  <div class="reset">
+    <button id="resetBtn">איפוס כל הסימונים</button>
+  </div>
+</div>
+
+<div class="saved" id="saved">נשמר ✓</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const TABS = [
+  {id:'dash',  name:'דשבורד', icon:'📊'},
+  {id:'guests',name:'אורחים ותשלומים', icon:'👥'},
+  {id:'expenses',name:'הוצאות', icon:'🧾'},
+  {id:'shop',  name:'קניות', icon:'🛒'},
+  {id:'meat',  name:'בשר', icon:'🥩'},
+  {id:'cold',  name:'קירור', icon:'❄️'},
+  {id:'coolers',name:'צידניות', icon:'🧊'},
+  {id:'gear',  name:'ציוד', icon:'🎒'},
+  {id:'plan',  name:'תוכנית', icon:'🗓️'},
+  {id:'forget',name:'אל תשכח', icon:'⚠️'},
+];
+
+const GUESTS = [
+  {id:'g1',name:'שחף'},
+  {id:'g2',name:'שראל',paid:true},
+  {id:'g3',name:'חבקין',paid:true},
+  {id:'g4',name:'אשף',note:'משלם כשייסגר'},
+  {id:'g5',name:'אסף',paid:true,amount:200},
+  {id:'g6',name:'שמיר'},
+  {id:'g7',name:'אריק',paid:true,note:'זוג',amount:240},
+  {id:'g8',name:'אייל'},
+  {id:'g9',name:'מז — תומר והרן',note:'שניים',amount:240},
+  {id:'g10',name:'קובה'},
+  {id:'g11',name:'שובל'},
+  {id:'g12',name:'אופק ואולגה',note:'שניים',amount:240},
+  {id:'g13',name:'רום וליסה',note:'שניים',amount:240},
+  {id:'g14',name:'אהוד'},
+  {id:'g15',name:'ווינשטוק'},
+  {id:'g16',name:'גיא',note:'לבד · טבעוני · מביא אוכל',amount:50},
+];
+
+const DATA = {
+  shop:[
+    {h:'🥩 בשר — לקנות שישי', items:[
+      {id:'s_m1',t:'מרגז',q:'1 ק״ג'},
+      {id:'s_m2',t:'כנפיים',q:'2 ק״ג'},
+      {id:'s_m3',t:'קבבים',q:'2 ק״ג'},
+      {id:'s_m4',t:'צלעות כבש *',q:'1.2–1.5 ק״ג',n:'לא בטוח — תלוי במחירים. אם יקר, להגדיל סטייקים במקום'},
+      {id:'s_m5',t:'סטייקים',q:'1.3–1.5 ק״ג'},
+    ]},
+    {h:'🥙 סלטים ורטבים — לקנות מחר', items:[
+      {id:'s_s1',t:'חומוס',q:'1.5–2 ק״ג'},
+      {id:'s_s2',t:'טחינה מוכנה',q:'750ג–1 ק״ג'},
+      {id:'s_s3',t:'סלט כרוב / כרוב במיונז',q:'~1 ק״ג'},
+      {id:'s_s4',t:'מטבוחה',q:'500–750 ג'},
+      {id:'s_s5',t:'סלט חצילים',q:'500–750 ג'},
+      {id:'s_s6',t:'מיונז'},
+      {id:'s_s7',t:'קטשופ'},
+      {id:'s_s8',t:'חרדל'},
+      {id:'s_s9',t:'צ׳ילי לכנפיים'},
+      {id:'s_s10',t:'מלח'},
+      {id:'s_s11',t:'פלפל שחור'},
+      {id:'s_s12',t:'שמן'},
+    ]},
+    {h:'🥤 שתייה להשלים — שישי', items:[
+      {id:'s_d1',t:'מים 1.5 ליטר',q:'עוד 8–10'},
+      {id:'s_d2',t:'קולה זירו',q:'עוד 1–2'},
+      {id:'s_d3',t:'סודה',q:'עוד 2'},
+      {id:'s_d4',t:'לימונים',q:'~2 ק״ג'},
+      {id:'s_d5',t:'נענע',q:'2–3 צרורות'},
+      {id:'s_d6',t:'תפוזים',q:'4–5'},
+    ]},
+    {h:'🔥 לבדוק שלא חסר — שישי', items:[
+      {id:'s_c1',t:'פחמים',q:'2–3 שקים'},
+      {id:'s_c2',t:'מדליק פחמים'},
+      {id:'s_c3',t:'נרות לעוגה'},
+    ]},
+    {h:'🍷 לקחת מוובה בשבת', items:[
+      {id:'a1',t:'אפרול',q:'1'},{id:'a2',t:'פרוסקו',q:'2'},{id:'a3',t:'אוזו',q:'2'},
+      {id:'a4',t:'יין לבן',q:'2'},{id:'a5',t:'רוזה',q:'1'},{id:'a6',t:'יין נוסף',q:'1'},
+      {id:'a7',t:'וויסקי',q:'1',n:'לא צריך קירור'},
+    ]},
+    {h:'🍺 לקחת מליבא בשבת', items:[
+      {id:'a8',t:'ארגז פרוני'},{id:'a9',t:'קנקנים',q:'2'},
+      {id:'a10',t:'עוגה'},{id:'a11',t:'נרות לעוגה'},{id:'a12',t:'מצית'},
+      {id:'a13',t:'סכין לעוגה'},{id:'a14',t:'כף / מרית להגשה'},
+    ]},
+    {h:'🫓 לקחת מאבו גוש בשבת', items:[
+      {id:'a15',t:'פיתות אשתנור',q:'30–35'},
+    ]},
+    {h:'🧊 לקנות בשבת סמוך ליציאה', items:[
+      {id:'s_ice',t:'קרח',q:'18–22 ק״ג',n:'8–10 לגיגית · 6–8 לקוקטיילים · 4 לצידניות'},
+    ]},
+    {info:'כבר יש אצל אמא — שתייה קלה', chips:['2 קולה רגילה','קולה זירו','6 מים מינרליים','4 סודה','לימונדה גדול','מיץ תפוזים','מיץ אשכוליות']},
+    {info:'כבר יש אצל אמא — סלטים ותוספות',chips:['שיפקה','זיתי קלמטה','זיתים ירוקים','זיתים מבוקעים פיקנטי','לבבות דקל','3 ק׳ מלפפונים חמוצים','סחוג','עגבניות שרי','גמבה','בצלים']},
+  ],
+  cold:[
+    {h:'❄️ חובה להכניס למקרר ביום שישי', items:[
+      {id:'c1',t:'כל הבשרים'},
+      {id:'c2',t:'כל הסלטים המוכנים'},
+      {id:'c3',t:'חומוס'},
+      {id:'c4',t:'טחינה מוכנה'},
+      {id:'c5',t:'מיונז'},
+      {id:'c6',t:'עוגה',n:'בקירור בליבא'},
+      {id:'c7',t:'פרוסקו'},
+      {id:'c8',t:'יין לבן'},
+      {id:'c9',t:'רוזה'},
+      {id:'c10',t:'ארגז פרוני',n:'אם יש מקום'},
+      {id:'c11',t:'קולה / זירו / סודה / מים',n:'לפי מקום פנוי'},
+    ]},
+    {h:'🧊 הכנות הקפאה', items:[
+      {id:'c12',t:'להקפיא בקבוקי מים / להכין קרחומים'},
+    ]},
+    {h:'🌡️ עדיפות נמוכה לקירור', items:[
+      {id:'c13',t:'אפרול'},
+      {id:'c14',t:'אוזו'},
+    ]},
+    {h:'📞 תזכורת לוובה ביום שישי', items:[
+      {id:'c15',t:'לבקש מוובה לקרר: פרוסקו, יין לבן, רוזה, יין נוסף, אפרול, אוזו',n:'וויסקי לא צריך קירור'},
+    ]},
+  ],
+  coolers:[
+    {h:'🥩 צידנית 1 — בשר בלבד', items:[
+      {id:'cl1',t:'כל הבשר'},
+      {id:'cl2',t:'קרחומים / בקבוקי מים קפואים'},
+    ]},
+    {h:'🥗 צידנית 2 — סלטים', items:[
+      {id:'cl3',t:'חומוס'},
+      {id:'cl4',t:'טחינה'},
+      {id:'cl5',t:'סלטים'},
+      {id:'cl6',t:'מיונז'},
+    ]},
+    {h:'🍹 צידנית 3 — שתייה וקוקטיילים', items:[
+      {id:'cl7',t:'פרוסקו'},
+      {id:'cl8',t:'יינות'},
+      {id:'cl9',t:'סודה'},
+      {id:'cl10',t:'מים'},
+      {id:'cl11',t:'קולה'},
+      {id:'cl12',t:'מיצים'},
+      {id:'cl13',t:'קרח לקוקטיילים'},
+    ]},
+    {h:'🍺 גיגית לבירות', items:[
+      {id:'cl14',t:'ארגז פרוני'},
+      {id:'cl15',t:'קרח (8–10 ק״ג)'},
+    ]},
+    {h:'🎂 צידנית 4 — לעוגה (מומלץ)', items:[
+      {id:'cl16',t:'תיק קירור נפרד לעוגה',n:'שלא תימעך ולא תתחמם'},
+    ]},
+    {info:'מינימום נדרש',chips:['3 צידניות','+ גיגית לבירות','+ מומלץ תיק לעוגה']},
+  ],
+  gear:[
+    {h:'🎒 ציוד שאתה מביא', items:[
+      {id:'gr1',t:'רמקול'},
+      {id:'gr2',t:'מנגל'},
+      {id:'gr3',t:'שולחנות'},
+      {id:'gr4',t:'מחצלת'},
+    ]},
+    {h:'🔌 לבדוק בבית', items:[
+      {id:'gr5',t:'לטעון את הרמקול'},
+      {id:'gr6',t:'כבל טעינה'},
+      {id:'gr7',t:'פאוורבנק'},
+      {id:'gr8',t:'רשת מתאימה למנגל'},
+    ]},
+    {h:'🔥 ציוד מנגל וצלייה', items:[
+      {id:'gr9',t:'רשת למנגל'},
+      {id:'gr10',t:'פחמים',q:'2–3 שקים'},
+      {id:'gr11',t:'מדליק פחמים'},
+      {id:'gr12',t:'מצית / גפרורים'},
+      {id:'gr13',t:'נפנף'},
+      {id:'gr14',t:'מלקחיים / צבת'},
+      {id:'gr15',t:'נייר כסף'},
+      {id:'gr16',t:'מגשים לבשר חי'},
+      {id:'gr17',t:'מגשים לבשר מוכן'},
+      {id:'gr18',t:'בקבוק מים גדול לכיבוי ליד המנגל'},
+      {id:'gr19',t:'שמן'},
+      {id:'gr20',t:'בצל'},
+    ]},
+    {h:'✅ להשלים או לוודא', items:[
+      {id:'gr21',t:'סכין חיתוך חדה'},
+      {id:'gr22',t:'כפות הגשה לסלטים'},
+      {id:'gr23',t:'פותחן בקבוקים'},
+      {id:'gr24',t:'חולץ פקקים'},
+      {id:'gr25',t:'קשים'},
+      {id:'gr26',t:'מגבונים'},
+      {id:'gr27',t:'אלכוג׳ל'},
+      {id:'gr28',t:'נייר טואלט'},
+      {id:'gr29',t:'שקיות אשפה נוספות'},
+      {id:'gr30',t:'קופסאות / שקיות לשאריות'},
+      {id:'gr31',t:'קרם הגנה'},
+      {id:'gr32',t:'תכשיר נגד יתושים'},
+      {id:'gr33',t:'פנס / תאורה לערב'},
+    ]},
+    {h:'🪑 ישיבה ונוחות', items:[
+      {id:'gr34',t:'3 מחצלות'},
+      {id:'gr35',t:'שולחנות מתקפלים'},
+      {id:'gr36',t:'להזכיר לכולם להביא כיסא מתקפל'},
+    ]},
+    {info:'כבר יש אצל אמא — חד״פ והגשה',chips:['9 תבניות','4 גלילי מגבת','מפיות','קעריות','50 צלחות קטנות','50 צלחות הגשה','19 כוסות איכותיות','כוסות נוספות','סכינים','סכו״ם','כפות וכפיות','מפות','מספריים','שקיות זבל','2 קרשי חיתוך','2 חב׳ שיפודים']},
+  ],
+  plan:[
+    {h:'🛒 שישי · קניות', items:[
+      {id:'p1',t:'לקנות בשר'},
+      {id:'p2',t:'לקנות חומוס, טחינה וסלטים',n:'את הסלטים קונים כבר מחר'},
+      {id:'p3',t:'לקנות רטבים'},
+      {id:'p4',t:'לקנות מים, זירו וסודה נוספים'},
+      {id:'p5',t:'לקנות לימונים, נענע ותפוזים'},
+      {id:'p6',t:'לקנות פחמים ומדליק אם חסר'},
+      {id:'p7',t:'לבדוק שיש נרות לעוגה'},
+    ]},
+    {h:'❄️ שישי · קירור', items:[
+      {id:'p8',t:'להכניס את הבשר למקרר'},
+      {id:'p9',t:'להכניס את הסלטים למקרר'},
+      {id:'p10',t:'לתזכר את וובה לקרר את האלכוהול'},
+      {id:'p11',t:'לוודא שהעוגה בקירור בליבא'},
+      {id:'p12',t:'להכניס בקבוקי מים למקפיא / להכין קרחומים'},
+    ]},
+    {h:'🎒 שישי · ציוד', items:[
+      {id:'p13',t:'לטעון את הרמקול'},
+      {id:'p14',t:'לרכז מנגל, רשת, שולחנות ומחצלות'},
+      {id:'p15',t:'לוודא 3 צידניות וגיגית'},
+      {id:'p16',t:'להכין תיק קירור נפרד לעוגה'},
+      {id:'p17',t:'לרכז נרות, מצית, פותחן וחולץ פקקים'},
+    ]},
+    {h:'🚗 שבת · יום האירוע', items:[
+      {id:'p18',t:'לקחת אלכוהול מוובה'},
+      {id:'p19',t:'לקחת עוגה, ארגז פרוני ו־2 קנקנים מליבא'},
+      {id:'p20',t:'לקחת פיתות אשתנור מאבו גוש',q:'30–35'},
+      {id:'p21',t:'לקנות קרח סמוך ליציאה'},
+      {id:'p22',t:'להעמיס בשר בצידנית נפרדת'},
+      {id:'p23',t:'להעמיס סלטים בצידנית נפרדת'},
+      {id:'p24',t:'להעמיס שתייה בצידנית נפרדת'},
+      {id:'p25',t:'להעביר את העוגה בתיק קירור נפרד'},
+      {id:'p26',t:'להעמיס מנגל, רמקול, שולחנות ומחצלות'},
+      {id:'p27',t:'לשלוח מיקום מדויק לאורחים'},
+      {id:'p28',t:'להגיע מוקדם להתארגנות'},
+      {id:'p29',t:'להדליק מנגל ב־15:00'},
+    ]},
+  ],
+  forget:[
+    {h:'⚠️ הדברים שהכי קל לשכוח', items:[
+      {id:'f1',t:'נרות לעוגה'},
+      {id:'f2',t:'מצית'},
+      {id:'f3',t:'סכין ומרית לעוגה'},
+      {id:'f4',t:'פותחן בקבוקים'},
+      {id:'f5',t:'חולץ פקקים'},
+      {id:'f6',t:'קרח'},
+      {id:'f7',t:'לימונים'},
+      {id:'f8',t:'נענע'},
+      {id:'f9',t:'תפוזים'},
+      {id:'f10',t:'פחמים'},
+      {id:'f11',t:'מדליק פחמים'},
+      {id:'f12',t:'מלקחיים'},
+      {id:'f13',t:'נייר כסף'},
+      {id:'f14',t:'שקיות אשפה'},
+      {id:'f15',t:'הרמקול טעון'},
+      {id:'f16',t:'תיק קירור לעוגה'},
+      {id:'f17',t:'לשלוח מיקום מדויק ביום האירוע'},
+    ]},
+  ],
+};
+
+const MEAT_SHARE = [
+  {t:'מרגז',q:'1 ק״ג'},{t:'כנפיים',q:'2 ק״ג'},{t:'קבבים',q:'2 ק״ג'},
+  {t:'צלעות כבש *',q:'1.2–1.5 ק״ג',n:'לא בטוח — תלוי במחירים. אם יקר, להגדיל סטייקים במקום'},
+  {t:'סטייקים',q:'1.3–1.5 ק״ג'},
+];
+DATA.meat=[
+  {h:'🥩 חלוקת בשר מומלצת', items:MEAT_SHARE.map((m,i)=>({id:'mt'+i,t:m.t,q:m.q,n:m.n}))},
+  {h:'📦 שישי — טיפול בבשר', items:[
+    {id:'mh1',t:'לקנות את הבשר'},
+    {id:'mh2',t:'להכניס מיד למקרר'},
+    {id:'mh3',t:'לשמור באריזות סגורות / תבניות מכוסות'},
+  ]},
+  {h:'🚗 שבת — העברה', items:[
+    {id:'mh4',t:'להעביר לצידנית נפרדת עם קרחומים / בקבוקי מים קפואים'},
+  ]},
+];
+
+const PROGRESS_CATS=[
+  {tab:'shop',name:'קניות',icon:'🛒'},
+  {tab:'meat',name:'בשר',icon:'🥩'},
+  {tab:'cold',name:'קירור',icon:'❄️'},
+  {tab:'coolers',name:'צידניות',icon:'🧊'},
+  {tab:'gear',name:'ציוד',icon:'🎒'},
+  {tab:'plan',name:'תוכנית עבודה',icon:'🗓️'},
+  {tab:'forget',name:'אל תשכח',icon:'⚠️'},
+];
+
+/* ---------------- STATE ---------------- */
+let STATE={checks:{},guests:{},expenses:[]};
+const STORE_KEY='state';
+
+async function loadState(){
+  GUESTS.forEach(g=>{STATE.guests[g.id]={paid:!!g.paid,amount:g.amount||120};});
+  try{
+    const r=await window.storage.get(STORE_KEY);
+    if(r&&r.value){
+      const saved=JSON.parse(r.value);
+      STATE.checks=saved.checks||{};
+      if(saved.guests){Object.keys(saved.guests).forEach(k=>{STATE.guests[k]={...STATE.guests[k],...saved.guests[k]};});}
+      if(saved.expenses)STATE.expenses=saved.expenses;
+    }
+  }catch(e){/* first run */}
+}
+let saveTimer=null;
+async function saveState(){
+  try{await window.storage.set(STORE_KEY,JSON.stringify(STATE));toast();}
+  catch(e){}
+}
+function toast(){const s=document.getElementById('saved');s.classList.add('show');clearTimeout(saveTimer);saveTimer=setTimeout(()=>s.classList.remove('show'),900);}
+
+/* ---------------- HELPERS ---------------- */
+function allItemsOf(tab){
+  const out=[];(DATA[tab]||[]).forEach(sec=>{if(sec.items)sec.items.forEach(i=>out.push(i));});return out;
+}
+function progressOf(tab){
+  const items=allItemsOf(tab);if(!items.length)return{done:0,total:0,pct:0};
+  const done=items.filter(i=>STATE.checks[i.id]).length;
+  return{done,total:items.length,pct:Math.round(done/items.length*100)};
+}
+function esc(s){return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+/* ---------------- RENDER: tabs ---------------- */
+const tabsEl=document.getElementById('tabs');
+const panelsEl=document.getElementById('panels');
+let activeTab='dash';
+
+function renderTabs(){
+  tabsEl.innerHTML='';
+  TABS.forEach(t=>{
+    const b=document.createElement('button');
+    b.className='tab'+(t.id===activeTab?' active':'');
+    let cnt='';
+    if(DATA[t.id]){const p=progressOf(t.id);cnt=`<span class="cnt">${p.done}/${p.total}</span>`;}
+    if(t.id==='guests'){const paid=Object.values(STATE.guests).filter(g=>g.paid).length;cnt=`<span class="cnt">${paid}/${GUESTS.length}</span>`;}
+    if(t.id==='expenses'){cnt=`<span class="cnt">${STATE.expenses.length}</span>`;}
+    b.innerHTML=`${t.icon} ${t.name}${cnt}`;
+    b.onclick=()=>{activeTab=t.id;render();};
+    tabsEl.appendChild(b);
+  });
+}
+
+/* ---------------- RENDER: checklist panel ---------------- */
+function checklistHTML(tab){
+  let h='';
+  (DATA[tab]||[]).forEach(sec=>{
+    if(sec.info){
+      h+=`<div class="card"><div class="info"><div class="it">✔️ ${esc(sec.info)}</div><div class="chips">${sec.chips.map(c=>`<span class="chip">${esc(c)}</span>`).join('')}</div></div></div>`;
+      return;
+    }
+    h+=`<div class="card sect"><div class="sect-head">${esc(sec.h)}</div><ul class="list">`;
+    sec.items.forEach(i=>{
+      const on=STATE.checks[i.id]?' on':'';
+      h+=`<li class="item${on}" data-id="${i.id}">
+        <span class="box">✓</span>
+        <span class="txt">${esc(i.t)}${i.q?`<span class="qty">${esc(i.q)}</span>`:''}${i.n?`<span class="note">${esc(i.n)}</span>`:''}</span>
+      </li>`;
+    });
+    h+=`</ul></div>`;
+  });
+  return h;
+}
+
+/* ---------------- RENDER: dashboard ---------------- */
+function dashboardHTML(){
+  const guestsArr=Object.entries(STATE.guests);
+  const expected=guestsArr.reduce((s,[id,g])=>s+(+g.amount||0),0);
+  const collected=guestsArr.reduce((s,[id,g])=>s+(g.paid?(+g.amount||0):0),0);
+  const outstanding=expected-collected;
+  const paidCount=guestsArr.filter(([,g])=>g.paid).length;
+  const spent=STATE.expenses.reduce((s,e)=>s+(+e.amount||0),0);
+  const balance=collected-spent;
+
+  let totalItems=0,totalDone=0;
+  PROGRESS_CATS.forEach(c=>{const p=progressOf(c.tab);totalItems+=p.total;totalDone+=p.done;});
+  const overall=totalItems?Math.round(totalDone/totalItems*100):0;
+
+  const target=new Date('2026-06-06T14:00:00+03:00');
+  const now=new Date();
+  let diff=Math.max(0,target-now);
+  const d=Math.floor(diff/864e5);diff-=d*864e5;
+  const hh=Math.floor(diff/36e5);diff-=hh*36e5;
+  const mm=Math.floor(diff/6e4);
+
+  let prog='';
+  PROGRESS_CATS.forEach(c=>{
+    const p=progressOf(c.tab);const done=p.pct===100;
+    prog+=`<div class="prog-row" data-go="${c.tab}">
+      <span class="pname"><span class="pic">${c.icon}</span>${c.name}</span>
+      <span class="bar"><i class="${done?'done':''}" style="width:${p.pct}%"></i></span>
+      <span class="pct">${p.done}/${p.total}</span>
+    </div>`;
+  });
+
+  return `
+  <div class="grid cols-3" style="margin-bottom:14px">
+    <div class="stat"><div class="glow"></div><div class="lab">התקדמות כללית</div><div class="big ember">${overall}%</div><div class="foot">${totalDone} מתוך ${totalItems} משימות</div></div>
+    <div class="stat"><div class="lab">אורחים</div><div class="big">${GUESTS.length}<span style="font-size:18px;color:var(--muted)"> רשומות</span></div><div class="foot">קניות לפי 20 · בשר לפי 19</div></div>
+    <div class="stat"><div class="lab">שולמו</div><div class="big">${paidCount}<span style="font-size:18px;color:var(--muted)">/${GUESTS.length}</span></div><div class="foot">נותרו ${GUESTS.length-paidCount} לגבייה</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px">
+    <h3><span class="h-ic">⏳</span> ספירה לאחור לאירוע</h3>
+    <div class="countdown">
+      <div class="cd"><div class="n">${d}</div><div class="u">ימים</div></div>
+      <div class="cd"><div class="n">${hh}</div><div class="u">שעות</div></div>
+      <div class="cd"><div class="n">${mm}</div><div class="u">דקות</div></div>
+    </div>
+    <div class="tip">המנגל נדלק ב־15:00 · המיקום המדויק נשלח ביום האירוע, סמוך לחניון פרדס גולדברג.</div>
+  </div>
+
+  <div class="grid cols-2">
+    <div class="card">
+      <h3><span class="h-ic">💰</span> כספים</h3>
+      <p class="desc">120₪ לאדם · גיא 50₪ · הפייבוקס פתוח</p>
+      <div class="prog-row" style="cursor:default"><span class="pname">צפי גבייה</span><span class="amt" style="font-family:'Frank Ruhl Libre';font-weight:700;color:var(--amber);font-size:18px">${expected.toLocaleString()}₪</span></div>
+      <div class="prog-row" style="cursor:default"><span class="pname">נגבה עד כה</span><span style="font-family:'Frank Ruhl Libre';font-weight:700;color:var(--paid);font-size:18px">${collected.toLocaleString()}₪</span></div>
+      <div class="prog-row" style="cursor:default"><span class="pname">נותר לגבות</span><span style="font-family:'Frank Ruhl Libre';font-weight:700;color:var(--red);font-size:18px">${outstanding.toLocaleString()}₪</span></div>
+      <div class="prog-row" style="cursor:default"><span class="pname">סך הוצאות</span><span style="font-family:'Frank Ruhl Libre';font-weight:700;color:var(--ember2);font-size:18px">${spent.toLocaleString()}₪</span></div>
+      <div class="prog-row" data-go="expenses"><span class="pname">יתרה (נגבה − הוצאות)</span><span style="font-family:'Frank Ruhl Libre';font-weight:700;color:${balance>=0?'var(--paid)':'var(--red)'};font-size:18px">${balance.toLocaleString()}₪</span></div>
+      <div class="bar" style="margin-top:8px"><i class="${collected>=expected?'done':''}" style="width:${expected?Math.round(collected/expected*100):0}%"></i></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="h-ic">📋</span> התקדמות לפי קטגוריה</h3>
+      <p class="desc">לחיצה על שורה עוברת לרשימה</p>
+      ${prog}
+    </div>
+  </div>`;
+}
+
+/* ---------------- RENDER: guests ---------------- */
+function guestsHTML(){
+  const expected=Object.values(STATE.guests).reduce((s,g)=>s+(+g.amount||0),0);
+  const collected=Object.values(STATE.guests).reduce((s,g)=>s+(g.paid?(+g.amount||0):0),0);
+  let rows='';
+  GUESTS.forEach(g=>{
+    const st=STATE.guests[g.id];
+    rows+=`<div class="guest${st.paid?' paid':''}" data-gid="${g.id}">
+      <button class="toggle">${st.paid?'שולם ✓':'לא שולם'}</button>
+      <div class="gname">${esc(g.name)}${g.note?`<small>${esc(g.note)}</small>`:''}</div>
+      <div class="amt">${(+st.amount).toLocaleString()}₪</div>
+    </div>`;
+  });
+  return `
+  <div class="gtotal">
+    <div class="stat"><div class="lab">צפי כולל</div><div class="big" style="font-size:30px">${expected.toLocaleString()}₪</div></div>
+    <div class="stat"><div class="lab">נגבה</div><div class="big" style="font-size:30px;color:var(--paid)">${collected.toLocaleString()}₪</div></div>
+    <div class="stat"><div class="lab">נותר</div><div class="big" style="font-size:30px;color:var(--ember2)">${(expected-collected).toLocaleString()}₪</div></div>
+  </div>
+  <div class="card">
+    <h3><span class="h-ic">👥</span> רשימת מוזמנים · 19 מגיעים</h3>
+    <p class="desc">לחיצה על הכפתור מסמנת מי שילם. הסכומים נשמרים אוטומטית.</p>
+    ${rows}
+    <div class="tip">לתכנון קניות עובדים לפי 20 אנשים · לתכנון בשר לפי 19 אוכלי בשר. גיא טבעוני, מביא לעצמו אוכל ומשלם 50₪.</div>
+  </div>`;
+}
+
+/* ---------------- RENDER: expenses ---------------- */
+function expensesHTML(){
+  const total=STATE.expenses.reduce((s,e)=>s+(+e.amount||0),0);
+  const collected=Object.values(STATE.guests).reduce((s,g)=>s+(g.paid?(+g.amount||0):0),0);
+  const balance=collected-total;
+  let rows='';
+  if(!STATE.expenses.length){
+    rows=`<div style="color:var(--faint);text-align:center;padding:20px;font-size:14px">עדיין לא הוזנו הוצאות — הוסף את הראשונה למעלה</div>`;
+  }else{
+    STATE.expenses.slice().reverse().forEach(e=>{
+      rows+=`<div class="guest" data-eid="${e.id}">
+        <button class="toggle del">מחק ✕</button>
+        <div class="gname">${esc(e.desc)}</div>
+        <div class="amt">${(+e.amount).toLocaleString()}₪</div>
+      </div>`;
+    });
+  }
+  return `
+  <div class="gtotal">
+    <div class="stat"><div class="lab">סך הוצאות</div><div class="big" style="font-size:30px;color:var(--ember2)">${total.toLocaleString()}₪</div></div>
+    <div class="stat"><div class="lab">נגבה מאורחים</div><div class="big" style="font-size:30px;color:var(--paid)">${collected.toLocaleString()}₪</div></div>
+    <div class="stat"><div class="lab">יתרה</div><div class="big" style="font-size:30px;color:${balance>=0?'var(--paid)':'var(--red)'}">${balance.toLocaleString()}₪</div></div>
+  </div>
+  <div class="card">
+    <h3><span class="h-ic">🧾</span> הוספת הוצאה</h3>
+    <p class="desc">תיאור + סכום. לדוגמה: "בשר מהקצב" · 540</p>
+    <div class="exp-add">
+      <input id="expDesc" class="exp-in" type="text" placeholder="תיאור ההוצאה">
+      <input id="expAmt" class="exp-in amt-in" type="number" inputmode="decimal" placeholder="₪ סכום">
+      <button id="expAdd" class="exp-btn">הוסף</button>
+    </div>
+  </div>
+  <div class="card">
+    <h3><span class="h-ic">📒</span> רשימת הוצאות</h3>
+    ${rows}
+  </div>`;
+}
+
+/* ---------------- MAIN RENDER ---------------- */
+function render(){
+  renderTabs();
+  let html='';
+  if(activeTab==='dash') html=dashboardHTML();
+  else if(activeTab==='guests') html=guestsHTML();
+  else if(activeTab==='expenses') html=expensesHTML();
+  else html=`<div class="grid">${checklistHTML(activeTab)}</div>`;
+  panelsEl.innerHTML=`<div class="panel active">${html}</div>`;
+  bindPanel();
+}
+
+function bindPanel(){
+  panelsEl.querySelectorAll('li.item').forEach(li=>{
+    li.onclick=()=>{
+      const id=li.dataset.id;
+      STATE.checks[id]=!STATE.checks[id];
+      li.classList.toggle('on',STATE.checks[id]);
+      renderTabs();
+      saveState();
+    };
+  });
+  panelsEl.querySelectorAll('[data-go]').forEach(row=>{
+    row.onclick=()=>{activeTab=row.dataset.go;render();window.scrollTo({top:0,behavior:'smooth'});};
+  });
+  panelsEl.querySelectorAll('.guest[data-gid]').forEach(g=>{
+    g.querySelector('.toggle').onclick=()=>{
+      const id=g.dataset.gid;
+      STATE.guests[id].paid=!STATE.guests[id].paid;
+      saveState();
+      render();
+    };
+  });
+  const addBtn=panelsEl.querySelector('#expAdd');
+  if(addBtn){
+    const doAdd=()=>{
+      const dEl=panelsEl.querySelector('#expDesc');
+      const aEl=panelsEl.querySelector('#expAmt');
+      const desc=dEl.value.trim();
+      const amt=parseFloat(aEl.value);
+      if(!desc){dEl.focus();return;}
+      if(isNaN(amt)){aEl.focus();return;}
+      STATE.expenses.push({id:'e'+Date.now(),desc,amount:amt});
+      saveState();render();
+    };
+    addBtn.onclick=doAdd;
+    panelsEl.querySelector('#expAmt').addEventListener('keydown',ev=>{if(ev.key==='Enter')doAdd();});
+    panelsEl.querySelector('#expDesc').addEventListener('keydown',ev=>{if(ev.key==='Enter')panelsEl.querySelector('#expAmt').focus();});
+  }
+  panelsEl.querySelectorAll('.guest[data-eid] .del').forEach(b=>{
+    b.onclick=()=>{
+      const id=b.closest('.guest').dataset.eid;
+      STATE.expenses=STATE.expenses.filter(e=>e.id!==id);
+      saveState();render();
+    };
+  });
+}
+
+document.getElementById('resetBtn').onclick=()=>{
+  if(confirm('לאפס את כל הסימונים? התשלומים יישארו.')){
+    STATE.checks={};saveState();render();
+  }
+};
+
+setInterval(()=>{if(activeTab==='dash')render();},60000);
+
+(async()=>{await loadState();render();})();
+</script>
+</body>
+</html>

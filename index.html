@@ -194,6 +194,8 @@
   .exp-btn{border:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:14.5px;padding:12px 24px;border-radius:11px;background:linear-gradient(180deg,var(--ember2),var(--ember));color:#241406}
   .exp-btn:hover{filter:brightness(1.07)}
   .guest .del{background:var(--card2)!important;color:var(--red)!important}
+  .g-del{flex:0 0 auto;border:none;cursor:pointer;font-family:inherit;font-size:13px;padding:6px 10px;border-radius:8px;background:var(--card2);color:var(--faint);transition:.15s}
+  .g-del:hover{background:rgba(207,75,47,.15);color:var(--red)}
   .saved{position:fixed;bottom:18px;inset-inline-start:50%;transform:translateX(-50%) translateY(30px);background:var(--paid);color:#14230a;font-weight:600;font-size:13px;padding:9px 20px;border-radius:999px;opacity:0;transition:.35s;z-index:50;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.4)}
   .saved.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
@@ -511,13 +513,14 @@ let STATE={checks:{},guests:{},expenses:[]};
 const STORE_KEY='state';
 
 async function loadState(){
-  GUESTS.forEach(g=>{STATE.guests[g.id]={paid:!!g.paid,amount:g.amount||120};});
+  // seed defaults (only used when no saved state exists)
+  GUESTS.forEach((g,i)=>{STATE.guests[g.id]={name:g.name,note:g.note||'',paid:!!g.paid,amount:g.amount||120,ts:i};});
   try{
     const r=await window.storage.get(STORE_KEY);
     if(r&&r.value){
       const saved=JSON.parse(r.value);
       STATE.checks=saved.checks||{};
-      if(saved.guests){Object.keys(saved.guests).forEach(k=>{STATE.guests[k]={...STATE.guests[k],...saved.guests[k]};});}
+      if(saved.guests)STATE.guests=saved.guests;
       if(saved.expenses)STATE.expenses=saved.expenses;
     }
   }catch(e){/* first run */}
@@ -552,7 +555,7 @@ function renderTabs(){
     b.className='tab'+(t.id===activeTab?' active':'');
     let cnt='';
     if(DATA[t.id]){const p=progressOf(t.id);cnt=`<span class="cnt">${p.done}/${p.total}</span>`;}
-    if(t.id==='guests'){const paid=Object.values(STATE.guests).filter(g=>g.paid).length;cnt=`<span class="cnt">${paid}/${GUESTS.length}</span>`;}
+    if(t.id==='guests'){const gs=Object.values(STATE.guests);const paid=gs.filter(g=>g.paid).length;cnt=`<span class="cnt">${paid}/${gs.length}</span>`;}
     if(t.id==='expenses'){cnt=`<span class="cnt">${STATE.expenses.length}</span>`;}
     b.innerHTML=`${t.icon} ${t.name}${cnt}`;
     b.onclick=()=>{activeTab=t.id;render();};
@@ -615,8 +618,8 @@ function dashboardHTML(){
   return `
   <div class="grid cols-3" style="margin-bottom:14px">
     <div class="stat"><div class="glow"></div><div class="lab">התקדמות כללית</div><div class="big ember">${overall}%</div><div class="foot">${totalDone} מתוך ${totalItems} משימות</div></div>
-    <div class="stat"><div class="lab">אורחים</div><div class="big">${GUESTS.length}<span style="font-size:18px;color:var(--muted)"> רשומות</span></div><div class="foot">קניות לפי 20 · בשר לפי 19</div></div>
-    <div class="stat"><div class="lab">שולמו</div><div class="big">${paidCount}<span style="font-size:18px;color:var(--muted)">/${GUESTS.length}</span></div><div class="foot">נותרו ${GUESTS.length-paidCount} לגבייה</div></div>
+    <div class="stat"><div class="lab">אורחים</div><div class="big">${guestsArr.length}<span style="font-size:18px;color:var(--muted)"> רשומות</span></div><div class="foot">קניות לפי 20 · בשר לפי 19</div></div>
+    <div class="stat"><div class="lab">שולמו</div><div class="big">${paidCount}<span style="font-size:18px;color:var(--muted)">/${guestsArr.length}</span></div><div class="foot">נותרו ${guestsArr.length-paidCount} לגבייה</div></div>
   </div>
 
   <div class="card" style="margin-bottom:14px">
@@ -651,15 +654,16 @@ function dashboardHTML(){
 
 /* ---------------- RENDER: guests ---------------- */
 function guestsHTML(){
-  const expected=Object.values(STATE.guests).reduce((s,g)=>s+(+g.amount||0),0);
-  const collected=Object.values(STATE.guests).reduce((s,g)=>s+(g.paid?(+g.amount||0):0),0);
+  const gList=Object.entries(STATE.guests).sort((a,b)=>(a[1].ts||0)-(b[1].ts||0));
+  const expected=gList.reduce((s,[,g])=>s+(+g.amount||0),0);
+  const collected=gList.reduce((s,[,g])=>s+(g.paid?(+g.amount||0):0),0);
   let rows='';
-  GUESTS.forEach(g=>{
-    const st=STATE.guests[g.id];
-    rows+=`<div class="guest${st.paid?' paid':''}" data-gid="${g.id}">
-      <button class="toggle">${st.paid?'שולם ✓':'לא שולם'}</button>
+  gList.forEach(([id,g])=>{
+    rows+=`<div class="guest${g.paid?' paid':''}" data-gid="${id}">
+      <button class="toggle">${g.paid?'שולם ✓':'לא שולם'}</button>
       <div class="gname">${esc(g.name)}${g.note?`<small>${esc(g.note)}</small>`:''}</div>
-      <div class="amt">${(+st.amount).toLocaleString()}₪</div>
+      <div class="amt">${(+g.amount).toLocaleString()}₪</div>
+      <button class="g-del" data-gid="${id}">✕</button>
     </div>`;
   });
   return `
@@ -668,11 +672,21 @@ function guestsHTML(){
     <div class="stat"><div class="lab">נגבה</div><div class="big" style="font-size:30px;color:var(--paid)">${collected.toLocaleString()}₪</div></div>
     <div class="stat"><div class="lab">נותר</div><div class="big" style="font-size:30px;color:var(--ember2)">${(expected-collected).toLocaleString()}₪</div></div>
   </div>
+  <div class="card" style="margin-bottom:14px">
+    <h3><span class="h-ic">➕</span> הוספת אורח</h3>
+    <p class="desc">שם + סכום. הערה — אופציונלי.</p>
+    <div class="exp-add">
+      <input id="gName" class="exp-in" type="text" placeholder="שם">
+      <input id="gNote" class="exp-in" type="text" placeholder="הערה (אופציונלי)" style="flex:0.8">
+      <input id="gAmt" class="exp-in amt-in" type="number" inputmode="decimal" placeholder="₪ סכום" value="120">
+      <button id="gAdd" class="exp-btn">הוסף</button>
+    </div>
+  </div>
   <div class="card">
-    <h3><span class="h-ic">👥</span> רשימת מוזמנים · 19 מגיעים</h3>
-    <p class="desc">לחיצה על הכפתור מסמנת מי שילם. הסכומים נשמרים אוטומטית.</p>
+    <h3><span class="h-ic">👥</span> רשימת מוזמנים · ${gList.length} רשומים</h3>
+    <p class="desc">לחיצה על הכפתור מסמנת מי שילם. ✕ מסיר אורח.</p>
     ${rows}
-    <div class="tip">לתכנון קניות עובדים לפי 20 אנשים · לתכנון בשר לפי 19 אוכלי בשר. גיא טבעוני, מביא לעצמו אוכל ומשלם 50₪.</div>
+    <div class="tip">לתכנון קניות עובדים לפי 20 אנשים · לתכנון בשר לפי 19 אוכלי בשר.</div>
   </div>`;
 }
 
@@ -743,8 +757,35 @@ function bindPanel(){
     g.querySelector('.toggle').onclick=()=>{
       const id=g.dataset.gid;
       STATE.guests[id].paid=!STATE.guests[id].paid;
-      saveState();
-      render();
+      saveState();render();
+    };
+  });
+  // add guest
+  const gAddBtn=panelsEl.querySelector('#gAdd');
+  if(gAddBtn){
+    const doAddGuest=()=>{
+      const nEl=panelsEl.querySelector('#gName');
+      const noteEl=panelsEl.querySelector('#gNote');
+      const aEl=panelsEl.querySelector('#gAmt');
+      const name=nEl.value.trim();
+      const amt=parseFloat(aEl.value);
+      if(!name){nEl.focus();return;}
+      if(isNaN(amt)||amt<0){aEl.focus();return;}
+      const id='g'+Date.now();
+      STATE.guests[id]={name,note:noteEl.value.trim(),paid:false,amount:amt,ts:Date.now()};
+      saveState();render();
+    };
+    gAddBtn.onclick=doAddGuest;
+    panelsEl.querySelector('#gName').addEventListener('keydown',ev=>{if(ev.key==='Enter')panelsEl.querySelector('#gAmt').focus();});
+    panelsEl.querySelector('#gAmt').addEventListener('keydown',ev=>{if(ev.key==='Enter')doAddGuest();});
+  }
+  // delete guest
+  panelsEl.querySelectorAll('.g-del').forEach(b=>{
+    b.onclick=()=>{
+      const id=b.dataset.gid;
+      if(confirm(`להסיר את ${STATE.guests[id]?.name}?`)){
+        delete STATE.guests[id];saveState();render();
+      }
     };
   });
   const addBtn=panelsEl.querySelector('#expAdd');

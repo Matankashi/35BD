@@ -213,6 +213,23 @@
   li.item .item-del:hover{color:var(--red);background:rgba(207,75,47,.12)}
   .saved{position:fixed;bottom:18px;inset-inline-start:50%;transform:translateX(-50%) translateY(30px);background:var(--paid);color:#14230a;font-weight:600;font-size:13px;padding:9px 20px;border-radius:999px;opacity:0;transition:.35s;z-index:50;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.4)}
   .saved.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* schedule / timeline */
+  .tl-grid{display:grid;grid-template-columns:72px 24px 1fr;gap:0 10px;align-items:start}
+  .tl-time{font-family:'Frank Ruhl Libre',serif;font-weight:900;font-size:17px;color:var(--ember2);text-align:start;padding-top:3px;line-height:1.2}
+  .tl-col{display:flex;flex-direction:column;align-items:center;padding-top:4px}
+  .tl-dot{width:13px;height:13px;border-radius:50%;background:linear-gradient(180deg,var(--ember2),var(--ember));flex:0 0 13px;box-shadow:0 0 10px rgba(239,122,58,.55)}
+  .tl-line{width:2px;flex:1;min-height:24px;background:linear-gradient(180deg,var(--ember),var(--line))}
+  .tl-label{font-size:14.5px;line-height:1.5;padding:3px 0 20px}
+  .tl-grid.tl-last .tl-line{display:none}
+  .tl-grid.tl-last .tl-label{padding-bottom:4px}
+
+  .sched-sec{margin-bottom:14px}
+  .sched-list{list-style:none;margin:8px 0 0;padding:0}
+  .sched-item{display:flex;align-items:flex-start;gap:11px;padding:10px 0;border-bottom:1px dashed var(--line)}
+  .sched-item:last-child{border-bottom:none}
+  .sched-num{width:24px;height:24px;border-radius:50%;background:var(--card2);border:1px solid var(--line);display:grid;place-items:center;font-size:11.5px;font-weight:700;color:var(--amber);flex:0 0 24px;margin-top:1px}
+  .sched-txt{flex:1;font-size:14.5px;line-height:1.45}
 </style>
 </head>
 <body>
@@ -246,6 +263,7 @@
 /* ---------------- DATA ---------------- */
 const TABS = [
   {id:'dash',  name:'דשבורד', icon:'📊'},
+  {id:'sched', name:'לו״ז האירוע', icon:'🎉'},
   {id:'guests',name:'אורחים ותשלומים', icon:'👥'},
   {id:'expenses',name:'הוצאות', icon:'🧾'},
   {id:'shop',  name:'קניות', icon:'🛒'},
@@ -820,11 +838,73 @@ function shopHTML(){
   return h;
 }
 
+/* ---------------- RENDER: schedule ---------------- */
+function scheduleHTML(){
+  const sections=[
+    {icon:'🙌',name:'פתיחה',items:[
+      'התכנסות והתמקמות החל מ־14:00',
+      'מוזיקה, בירות קרות ונשנושים',
+      'הרמת כוסית בתחילת האירוע',
+      'כמה מילים קצרות ממך ופתיחה רשמית של יום ההולדת',
+    ]},
+    {icon:'🍖',name:'אוכל ושתייה',items:[
+      'פתיחת שולחן עם פיתות, חומוס, טחינה, סלטים וחמוצים',
+      'הדלקת המנגל ב־15:00',
+      'סבב ראשון של בשרים: כנפיים, מרגז, צ׳וריסוס וקבבים',
+      'סבב שני: פרגיות ונתח בקר איכותי',
+      'אפרול שפריץ, אוזו לימונים, יין, וויסקי ושתייה קלה',
+      'עוגה, נרות וברכות',
+    ]},
+    {icon:'🎯',name:'משחקים ופעילויות',items:[
+      'משחק הכר את הקאש',
+      'פריזבי',
+      'כדורגל',
+      'ערסל וישיבה חופשית על המחצלות',
+      'מוזיקה, שיחות וצחוקים',
+    ]},
+    {icon:'📸',name:'תמונות וזיכרונות',items:[
+      'צילום תמונות וסרטונים במהלך האירוע',
+      'העלאת התמונות לקבוצת הוואטסאפ כדי ליצור אלבום משותף',
+    ]},
+  ];
+  const timeline=[
+    {time:'14:00',label:'התכנסות, מוזיקה ובירות'},
+    {time:'14:30',label:'הרמת כוסית'},
+    {time:'15:00',label:'הדלקת המנגל'},
+    {time:'15:30',label:'משחק הכר את הקאש'},
+    {time:'בהמשך',label:'פריזבי, כדורגל, אוכל חופשי ועוגה לקראת הסוף'},
+  ];
+  let h=`<div class="card" style="margin-bottom:14px">
+    <h3><span class="h-ic">⏰</span> סדר מומלץ</h3>
+    <p class="desc">תוכנית הפעולה המומלצת ליום</p>`;
+  timeline.forEach((t,i)=>{
+    const last=i===timeline.length-1;
+    h+=`<div class="tl-grid${last?' tl-last':''}">
+      <div class="tl-time">${esc(t.time)}</div>
+      <div class="tl-col"><div class="tl-dot"></div><div class="tl-line"></div></div>
+      <div class="tl-label">${esc(t.label)}</div>
+    </div>`;
+  });
+  h+=`</div>`;
+  let n=1;
+  sections.forEach(sec=>{
+    h+=`<div class="card sched-sec">
+      <h3><span class="h-ic">${sec.icon}</span> ${esc(sec.name)}</h3>
+      <ul class="sched-list">`;
+    sec.items.forEach(item=>{
+      h+=`<li class="sched-item"><span class="sched-num">${n++}</span><span class="sched-txt">${esc(item)}</span></li>`;
+    });
+    h+=`</ul></div>`;
+  });
+  return h;
+}
+
 /* ---------------- MAIN RENDER ---------------- */
 function render(){
   renderTabs();
   let html='';
   if(activeTab==='dash') html=dashboardHTML();
+  else if(activeTab==='sched') html=scheduleHTML();
   else if(activeTab==='guests') html=guestsHTML();
   else if(activeTab==='expenses') html=expensesHTML();
   else if(activeTab==='shop') html=`<div class="grid">${shopHTML()}</div>`;
